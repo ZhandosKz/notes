@@ -52,6 +52,7 @@ return CMap::mergeArray(array(
 
 				'api/notes/view/<path:\S+>'=>'api/notes/view',
 				'api/notes/update/<path:\S+>'=>'api/notes/update',
+				'api/notes/delete/<path:\S+>'=>'api/notes/delete',
 				'<controller:\w+>/<id:\d+>'=>'<controller>/view',
 				'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
 				'<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
@@ -63,17 +64,6 @@ return CMap::mergeArray(array(
 			),
 			'showScriptName' => FALSE
 		),
-
-		// uncomment the following to use a MySQL database
-		/*
-		'db'=>array(
-			'connectionString' => 'mysql:host=localhost;dbname=testdrive',
-			'emulatePrepare' => true,
-			'username' => 'root',
-			'password' => '',
-			'charset' => 'utf8',
-		),
-		*/
 		'errorHandler'=>array(
 			// use 'site/error' action to display errors
 			'errorAction'=>'site/error',

@@ -103,6 +103,30 @@ class NotesController extends ModuleController
 		}
 	}
 
+	public function actionDelete($path)
+	{
+		try
+		{
+			$user = User::getUserByApiKey(MyArray::get($_GET, 'key'));
+			$note = $this->_loadModel($path);
+			if ($note->user_id !== $user->getPrimaryKey())
+			{
+				throw new CHttpException(403, 'Нет прав для редактирования');
+			}
+			$note->delete();
+
+		}
+		catch (CHttpException $e)
+		{
+			$this->status = $e->statusCode;
+			$this->statusMessage = $e->getMessage();
+		}
+		catch (CException $e)
+		{
+			$this->status = 500;
+			$this->statusMessage = $e->getMessage();
+		}
+	}
 	private function _loadModel($path)
 	{
 		$note = Note::model()->with('url')->find('url.path = :path AND status = :status', array(':path' => $path, ':status' => Note::STATUS_OPEN));
