@@ -49,7 +49,7 @@ class RegistrationForm extends CFormModel
 			return FALSE;
 		}
 
-		$user = new User();
+		$user = new User('register');
 		$user->username = $this->username;
 		$user->password = $this->password;
 		$user->email = $this->email;

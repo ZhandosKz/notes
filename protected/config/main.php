@@ -44,6 +44,7 @@ return CMap::mergeArray(array(
 			'urlFormat'=>'path',
 			'rules'=>array(
 				'/' => 'note/default/add',
+				'complete/<path:\S+>' => 'note/default/complete',
 				array(
 					'class' => 'application.components.NoteUrlRule',
 					'connectionID' => 'db',

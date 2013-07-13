@@ -1,6 +1,7 @@
 <?php
 /**
  * @var $form CActiveForm
+ * @var Note $model
  */
 ?>
 <div id="noteformw">

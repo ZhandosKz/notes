@@ -10,9 +10,13 @@ $form = $this->beginWidget('CActiveForm', array(
 		'validateOnSubmit'=>true,
 	),
 )); ?>
+<?=$form->errorSummary($model)?>
 <div class="form">
 	<?=$form->labelEx($model, 'username')?>
 	<?=$form->textField($model, 'username')?>
+	<br/>
+	<?=$form->labelEx($model, 'email')?>
+	<?=$form->textField($model, 'email')?>
 	<br/>
 	<?=$form->labelEx($model, 'password')?>
 	<?=$form->passwordField($model, 'password')?>

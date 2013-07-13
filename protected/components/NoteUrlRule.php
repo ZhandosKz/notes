@@ -16,15 +16,18 @@ class NoteUrlRule extends CBaseUrlRule
 	{
 		if (preg_match('/^([a-z0-9-]+)$/i', $pathInfo, $matches))
 		{
-			$url = Url::model()->find('path = :path AND object_alias = :objectAlias', array(
+			Yii::import('application.modules.note.models.Note');
+			$note = Note::model()->with('url')->find('url.path = :path AND url.object_alias = :objectAlias AND t.status = :status', array(
 				':path' => $matches[1],
 				':objectAlias' => 'Note',
+				':status' => Note::STATUS_OPEN
 			));
-			if (!$url instanceof Url)
+
+			if (!$note instanceof Note)
 			{
 				return FALSE;
 			}
-			$_GET['id'] = $url->getPrimaryKey();
+			$_GET['id'] = $note->getPrimaryKey();
 			return 'note/default/view';
 		}
 		return false;

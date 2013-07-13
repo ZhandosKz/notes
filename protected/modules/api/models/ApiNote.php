@@ -24,6 +24,15 @@ class ApiNote extends Note
 
 	public static function saveNote(Note $note, Array $data, $user)
 	{
+		if ($note->isNewRecord)
+		{
+			$note->setScenario('create');
+		}
+		else
+		{
+			$note->setScenario('update');
+		}
+
 		if (!empty($user))
 		{
 			$note->user_id = $user->getPrimaryKey();

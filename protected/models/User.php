@@ -126,12 +126,13 @@ class User extends CActiveRecord
 
 	public function beforeSave()
 	{
-		if (!in_array($this->getScenario(), array('newPassword')))
+		if (!in_array($this->getScenario(), array('register')))
 		{
 			return TRUE;
 		}
 		$this->salt = self::getSalt();
 		$this->password = self::hashPassword($this->password, $this->salt);
+		$this->api_key = self::getSalt(64);
 		return TRUE;
 	}
 

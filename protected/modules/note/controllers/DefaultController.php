@@ -1,16 +1,19 @@
 <?php
 class DefaultController extends Controller
 {
-	public function actionIndex()
-	{
-		echo $this->createUrl('/note/default/view', array('path' => 'fdfds'));
-		$this->render('index');
-	}
+	public function actionIndex(){}
+
 	public function actionView($id)
 	{
-		echo $id;
-		echo 'upi!';
+		$model = Note::model()->findByPk($id);
+
+		$model->status = Note::STATUS_CLOSED;
+		$model->update();
+		$this->render('view', array(
+			'model' => $model
+		));
 	}
+
 	public function actionAdd()
 	{
 		$model = new Note('create');
@@ -19,18 +22,22 @@ class DefaultController extends Controller
 
 		if ($request->isPostRequest)
 		{
-			if ($model->saveNote($request->getPost(get_class($model))))
+			$model->setAttributes($request->getPost(get_class($model)));
+			if ($model->save())
 			{
-				Note::saveUrl($model);
-				//FlashMessage::setSuccess('Note create');
-
+				$model->saveUrl();
+				$this->redirect(array('complete', 'path' => $model->url->path));
 			}
 		}
+		$this->render('create', array(
+			'model' => $model
+		));
+	}
 
-//		$this->render('create', array(
-//			'model' => $model
-//		));
-
-		$this->renderPartial('//layouts/api', array('body' => 'fdfsdf', 'successMessage' => 'ok', 'failureMessage' => 'error'));
+	public function actionComplete($path)
+	{
+		$this->render('complete', array(
+			'path' => $path
+		));
 	}
 }
