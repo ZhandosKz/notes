@@ -11,19 +11,37 @@ class ApiNote extends Note
 			$result[] = self::setItem($note);
 		}
 
-		return json_encode($result);
+		return $result;
 	}
 
 	public static function get($path)
 	{
-		$note = self::model()->with('url')->find('url.path = :path', array(':path' => $path));
+		$note = self::model()->with('url')->find('url.path = :path AND status = :status', array(':path' => $path, ':status' => Note::STATUS_OPEN));
 		if (!$note instanceof Note)
 		{
-			throw new CHttpException(404);
+			throw new CHttpException(404, 'Заметка не найдена');
 		}
-		return json_encode(self::setItem($note));
+		$note->status = Note::STATUS_CLOSED;
+		if (!$note->save())
+		{
+			throw new CException('Ошибка обновления статуса', E_USER_ERROR);
+		}
+		return self::setItem($note);
 	}
 
+	public static function create(Array $data)
+	{
+		$note = new Note('create');
+
+		$note->setAttributes((empty($data['data'])) ? array() : $data['data']);
+		if (!$note->save())
+		{
+			throw new CException('Ошибка сохранения', E_USER_ERROR);
+		}
+		$note->saveUrl();
+		return self::setItem($note);
+
+	}
 	private static function setItem(Note $note)
 	{
 		return array(

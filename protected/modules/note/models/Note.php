@@ -129,16 +129,16 @@ class Note extends CActiveRecord
 	}
 
 
-	public static function saveUrl(Note $note)
+	public function saveUrl()
 	{
-		if ($note->isNewRecord)
+		if ($this->isNewRecord)
 		{
 			throw new CException('Сперва нужно создать заметку', E_USER_ERROR);
 		}
 
 		$url = new Url();
-		$url->object_alias = get_class($note);
-		$url->object_id = $note->getPrimaryKey();
+		$url->object_alias = get_class($this);
+		$url->object_id = $this->getPrimaryKey();
 		$url->path = Url::getRandom();
 		if (!$url->save())
 		{

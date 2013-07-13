@@ -6,7 +6,9 @@ class ModuleController extends CController
 	protected $body;
 	protected $successMessage;
 	protected $failureMessage;
+
 	protected $status = 200;
+	protected $statusMessage;
 
 	protected $outputFormat = 'json';
 
@@ -16,8 +18,8 @@ class ModuleController extends CController
 
 	public function afterAction($action)
 	{
-
-		header('HTTP/1.1 '.$this->status.' '.RequestStatus::getStatusCodeMessage($this->status));
+		$statusMessage = (!empty($this->statusMessage)) ? $this->statusMessage : RequestStatus::getStatusCodeMessage($this->status);
+		header('HTTP/1.1 '.$this->status.' '.$statusMessage);
 
 		$as = strtolower(MyArray::get($_GET, 'as'));
 
