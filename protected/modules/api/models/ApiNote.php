@@ -7,7 +7,7 @@ class ApiNote extends Note
 		$result = array();
 		foreach ($notes as $note)
 		{
-			$result[] = self::updateStatus($note);
+			$result[] = self::getData($note);
 		}
 		return $result;
 	}
@@ -47,11 +47,10 @@ class ApiNote extends Note
 		return self::getData($note);
 	}
 
-	private static function getData(Note $note)
+	public static function getData(Note $note)
 	{
 		return array(
 			'id' => $note->getPrimaryKey(),
-			'text' => $note->text,
 			'link' => Yii::app()->controller->createAbsoluteUrl('/note/default/view', array('path' => $note->url->path)),
 			'status' => $note->status,
 		);

@@ -27,7 +27,7 @@ class NotesController extends ModuleController
 		try
 		{
 			$note = $this->_loadModel($path);
-			$this->body = ApiNote::updateStatus($note);
+			$this->body = ApiNote::getData($note);
 		}
 		catch (CHttpException $e)
 		{
