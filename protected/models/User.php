@@ -149,5 +149,15 @@ class User extends CActiveRecord
 		return $secret;
 	}
 
+	public static function getUserByApiKey($key)
+	{
+		$user = User::model()->find('api_key = :key', array(':key' => $key));
+		if (!$key || !$user instanceof User)
+		{
+			throw new CHttpException(403, 'Wrong api key', E_USER_ERROR);
+		}
+
+		return $user;
+	}
 
 }

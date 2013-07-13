@@ -15,6 +15,7 @@ return CMap::mergeArray(array(
 	'import'=>array(
 		'application.models.*',
 		'application.components.*',
+		'application.behaviors.*',
 		'application.helpers.*',
 	),
 
@@ -48,11 +49,14 @@ return CMap::mergeArray(array(
 					'connectionID' => 'db',
 				),
 
+				'api/notes/view/<path:\S+>'=>'api/notes/view',
+				'api/notes/update/<path:\S+>'=>'api/notes/update',
 				'<controller:\w+>/<id:\d+>'=>'<controller>/view',
 				'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
 				'<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
 				'<action:(login|logout|register)>' => 'auth/<action>',
-				'api/notes/<path:\w+>'=>'api/notes/view',
+
+
 
 
 			),

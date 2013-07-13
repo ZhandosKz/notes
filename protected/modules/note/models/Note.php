@@ -7,6 +7,7 @@
  * @property integer $id
  * @property string $text
  * @property string $reference
+ * @property integer $user_id
  * @property integer $status
  */
 class Note extends CActiveRecord
@@ -96,38 +97,6 @@ class Note extends CActiveRecord
 		));
 	}
 
-	public function saveNote(Array $data)
-	{
-		$this->setAttributes($data);
-
-		if ($this->validate() && $this->save())
-		{
-			return TRUE;
-		}
-		return FALSE;
-	}
-
-
-	public static function updateNote($path, Array $data)
-	{
-		$model = self::model()->with('url')->find('url.path = :path', array(':path' => $path));
-		if (!$model instanceof Note)
-		{
-			throw new CHttpException(404, 'Note not found');
-		}
-		$model->setAttributes($data);
-		$model->save();
-
-		return $model;
-
-	}
-
-	public static function createNote(Array $data)
-	{
-
-
-	}
-
 
 	public function saveUrl()
 	{
@@ -136,16 +105,29 @@ class Note extends CActiveRecord
 			throw new CException('Сперва нужно создать заметку', E_USER_ERROR);
 		}
 
-		$url = new Url();
-		$url->object_alias = get_class($this);
-		$url->object_id = $this->getPrimaryKey();
-		$url->path = Url::getRandom();
-		if (!$url->save())
+		if (!$this->url instanceof Url)
+		{
+			$this->url = new Url();
+			$this->url->object_alias = get_class($this);
+			$this->url->object_id = $this->getPrimaryKey();
+		}
+
+		$this->url->path = Url::getRandom();
+
+		if (!$this->url->save())
 		{
 			throw new CException('Ошибка сохранения ссылки', E_USER_ERROR);
 		}
-		return $url;
+		return $this->url;
 	}
 
+	public function behaviors()
+	{
+		return array(
+			'CreatedModified' => array(
+				'class' => 'CreatedModifiedBehavior'
+			),
+		);
+	}
 
 }

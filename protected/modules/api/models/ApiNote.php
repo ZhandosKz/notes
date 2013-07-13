@@ -2,47 +2,43 @@
 class ApiNote extends Note
 {
 
-	public static function getAll($key = 1)
+	public static function getAll(Array $notes)
 	{
-		$notes = self::model()->with('user')->findAll('user.api_key = :apiKey', array(':apiKey' => $key));
 		$result = array();
 		foreach ($notes as $note)
 		{
-			$result[] = self::setItem($note);
+			$result[] = self::updateStatus($note);
 		}
-
 		return $result;
 	}
 
-	public static function get($path)
+	public static function updateStatus(Note $note)
 	{
-		$note = self::model()->with('url')->find('url.path = :path AND status = :status', array(':path' => $path, ':status' => Note::STATUS_OPEN));
-		if (!$note instanceof Note)
-		{
-			throw new CHttpException(404, 'Заметка не найдена');
-		}
 		$note->status = Note::STATUS_CLOSED;
 		if (!$note->save())
 		{
 			throw new CException('Ошибка обновления статуса', E_USER_ERROR);
 		}
-		return self::setItem($note);
+		return self::getData($note);
 	}
 
-	public static function create(Array $data)
+	public static function saveNote(Note $note, Array $data, $user)
 	{
-		$note = new Note('create');
+		if (!empty($user))
+		{
+			$note->user_id = $user->getPrimaryKey();
+		}
 
-		$note->setAttributes((empty($data['data'])) ? array() : $data['data']);
+		$note->setAttributes((empty($data)) ? array() : $data);
 		if (!$note->save())
 		{
 			throw new CException('Ошибка сохранения', E_USER_ERROR);
 		}
 		$note->saveUrl();
-		return self::setItem($note);
-
+		return self::getData($note);
 	}
-	private static function setItem(Note $note)
+
+	private static function getData(Note $note)
 	{
 		return array(
 			'id' => $note->getPrimaryKey(),
@@ -51,4 +47,6 @@ class ApiNote extends Note
 			'status' => $note->status,
 		);
 	}
+
+
 }
