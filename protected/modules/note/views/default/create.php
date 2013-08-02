@@ -4,6 +4,15 @@
  * @var Note $model
  */
 ?>
+<link rel="stylesheet" href="/libs/aloha/css/aloha.css" type="text/css">
+<script src="/libs/aloha/lib/require.js"></script>
+<script src="/libs/aloha/lib/aloha.js"
+        data-aloha-plugins="common/ui,common/format,common/highlighteditables,common/link"></script>
+<script>
+	Aloha.ready( function() {
+		Aloha.jQuery('#id_body').aloha();
+	});
+</script>
 <div id="noteformw">
 	<h3>Write your note below</h3>
 	<?php $form = $this->beginWidget('CActiveForm'); ?>

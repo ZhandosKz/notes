@@ -1,5 +1,5 @@
 <div id="noteformw">
 	<div id="id_body_wrap">
-		<?=CHtml::link($this->createAbsoluteUrl('/note/default/view', array('path' => $path)), $this->createAbsoluteUrl('/note/default/view', array('path' => $path)))?>
+		<?=Yii::t('app', 'Your link:')?> <input contenteditable="false" size="25" onclick="$(this).select()" value="<?=$this->createAbsoluteUrl('/note/default/view', array('path' => $path))?>">
 	</div>
 </div>
